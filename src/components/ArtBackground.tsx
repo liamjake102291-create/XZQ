@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 
 const ARTWORKS = [
-  'art/01-hydrangea-rain.jpg',
-  'art/02-garden-window.jpg',
-  'art/03-clover-stone.jpg',
-  'art/04-blue-wall.jpg',
-  'art/05-night-bloom.jpg',
-  'art/06-open-window.jpg',
-  'art/07-fence-rain.jpg',
+  'art/01-hydrangea-rain.webp',
+  'art/02-garden-window.webp',
+  'art/03-clover-stone.webp',
+  'art/04-blue-wall.webp',
+  'art/05-night-bloom.webp',
+  'art/06-open-window.webp',
+  'art/07-fence-rain.webp',
 ].map((path) => `${import.meta.env.BASE_URL}${path}`);
 
 const vertexShader = `
@@ -27,8 +27,9 @@ const fragmentShader = `
     float edgeX = smoothstep(0.0, 0.14, vUv.x) * smoothstep(0.0, 0.14, 1.0 - vUv.x);
     float edgeY = smoothstep(0.0, 0.18, vUv.y) * smoothstep(0.0, 0.18, 1.0 - vUv.y);
     float feather = pow(edgeX * edgeY, 0.72);
-    vec3 lifted = mix(texel.rgb, vec3(0.96, 0.95, 0.88), 0.12);
-    vec3 toned = mix(lifted, lifted * vec3(0.94, 1.0, 0.91), 0.10);
+    vec3 lifted = mix(texel.rgb, vec3(0.98, 0.97, 0.94), 0.16);
+    vec3 brandTint = mix(vec3(1.0, 0.72, 0.72), vec3(0.55, 0.82, 1.0), vUv.x);
+    vec3 toned = mix(lifted, lifted * brandTint, 0.10);
     gl_FragColor = vec4(toned, texel.a * feather * uOpacity);
   }
 `;
@@ -36,10 +37,15 @@ const fragmentShader = `
 export function ArtBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [ready, setReady] = useState(false);
+  const [lite, setLite] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+    if (matchMedia('(max-width: 767px)').matches) {
+      setLite(true);
+      return;
+    }
 
     let disposed = false;
     let cleanup = () => undefined;
@@ -47,12 +53,14 @@ export function ArtBackground() {
     void import('three').then(async (THREE) => {
       if (disposed) return;
       const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: innerWidth > 767, powerPreference: 'high-performance' });
+      const mobile = innerWidth < 768;
+      const sources = mobile ? [ARTWORKS[0], ARTWORKS[3], ARTWORKS[6]] : ARTWORKS;
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: !mobile, powerPreference: 'high-performance' });
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 50);
       const loader = new THREE.TextureLoader();
       const geometry = new THREE.PlaneGeometry(9.8, 5.45, 1, 1);
-      const textures = await Promise.all(ARTWORKS.map((src) => loader.loadAsync(src)));
+      const textures = await Promise.all(sources.map((src) => loader.loadAsync(src)));
       if (disposed) {
         textures.forEach((texture) => texture.dispose());
         geometry.dispose();
@@ -60,13 +68,14 @@ export function ArtBackground() {
         return;
       }
 
-      renderer.setClearColor(0x07080a, 0);
-      renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 768 ? 1.25 : 1.75));
+      renderer.setClearColor(0xf5faff, 0);
+      renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.1 : 1.55));
       renderer.setSize(innerWidth, innerHeight, false);
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       camera.position.z = 6;
 
-      const xOffsets = [-1.55, 1.5, -0.75, 1.35, -1.35, 0.85, 0];
+      const xOffsets = mobile ? [-0.7, 0.75, -0.2] : [-1.55, 1.5, -0.75, 1.35, -1.35, 0.85, 0];
+      const depthStep = mobile ? 7.5 : 3.15;
       const meshes = textures.map((texture, index) => {
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.anisotropy = Math.min(4, renderer.capabilities.getMaxAnisotropy());
@@ -78,7 +87,7 @@ export function ArtBackground() {
           depthWrite: false,
         });
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(xOffsets[index], index % 2 ? -0.1 : 0.18, -index * 3.15);
+        mesh.position.set(xOffsets[index], index % 2 ? -0.1 : 0.18, -index * depthStep);
         mesh.rotation.set((index % 2 ? -1 : 1) * 0.018, (index % 2 ? -1 : 1) * 0.045, (index % 3 - 1) * 0.012);
         scene.add(mesh);
         return mesh;
@@ -93,7 +102,7 @@ export function ArtBackground() {
       const resize = () => {
         camera.aspect = innerWidth / innerHeight;
         camera.updateProjectionMatrix();
-        renderer.setPixelRatio(Math.min(devicePixelRatio, innerWidth < 768 ? 1.25 : 1.75));
+        renderer.setPixelRatio(Math.min(devicePixelRatio, mobile ? 1.1 : 1.55));
         renderer.setSize(innerWidth, innerHeight, false);
       };
       const onScroll = () => {
@@ -113,7 +122,7 @@ export function ArtBackground() {
         meshes.forEach((mesh, index) => {
           const distance = camera.position.z - mesh.position.z;
           const focus = Math.max(0, 1 - Math.abs(distance - 5.4) / 5.2);
-          mesh.material.uniforms.uOpacity.value = focus * (innerWidth < 768 ? 0.32 : 0.42);
+          mesh.material.uniforms.uOpacity.value = focus * (mobile ? 0.24 : 0.38);
           mesh.rotation.y += ((index % 2 ? -1 : 1) * pointerX * 0.055 - mesh.rotation.y) * 0.025;
           mesh.position.y = (index % 2 ? -0.1 : 0.18) + Math.sin(scrollCurrent * 8 + index) * 0.12;
           const scale = 1 + focus * 0.055;
@@ -140,7 +149,7 @@ export function ArtBackground() {
         meshes.forEach((mesh) => {
           const distance = camera.position.z - mesh.position.z;
           const focus = Math.max(0, 1 - Math.abs(distance - 5.4) / 5.2);
-          mesh.material.uniforms.uOpacity.value = focus * 0.36;
+          mesh.material.uniforms.uOpacity.value = focus * (mobile ? 0.22 : 0.34);
         });
         renderer.render(scene, camera);
       }
@@ -165,7 +174,7 @@ export function ArtBackground() {
     };
   }, []);
 
-  return <div className={`art-scene ${ready ? 'is-ready' : ''}`} aria-hidden="true">
+  return <div className={`art-scene ${ready ? 'is-ready' : ''} ${lite ? 'is-lite' : ''}`} aria-hidden="true">
     <div className="art-scene-fallback" />
     <canvas ref={canvasRef} />
     <div className="art-scene-shade" />

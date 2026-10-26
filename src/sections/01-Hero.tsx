@@ -7,6 +7,8 @@ gsap.registerPlugin(ScrollTrigger);
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const bridge = useRef<SVGSVGElement>(null);
+  const wordmark = `${import.meta.env.BASE_URL}brand-wordmark.webp`;
+  const emblem = `${import.meta.env.BASE_URL}brand-emblem.webp`;
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -27,6 +29,7 @@ export function Hero() {
     return () => { ctx.revert(); removeEventListener('pointermove', move); };
   }, []);
   return <section id="top" ref={ref} className="hero" aria-labelledby="hero-title">
+    <div className="hero-brand-art" aria-hidden="true"><img src={emblem} alt="" /></div>
     <div className="bridge" aria-hidden="true">
       <svg ref={bridge} viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
         <defs><linearGradient id="bridge-gradient"><stop offset="0" stopColor="#E9A178" stopOpacity="0"/><stop offset=".28" stopColor="#E9A178"/><stop offset=".5" stopColor="#F2EFE7"/><stop offset=".72" stopColor="#E9A178"/><stop offset="1" stopColor="#E9A178" stopOpacity="0"/></linearGradient><filter id="blur10"><feGaussianBlur stdDeviation="10"/></filter><filter id="blur24"><feGaussianBlur stdDeviation="24"/></filter></defs>
@@ -37,6 +40,7 @@ export function Hero() {
     </div>
     <div className="hero-vignette" aria-hidden="true" />
     <div className="hero-copy">
+      <img className="hero-wordmark hero-meta" src={wordmark} alt="心智桥工作室" fetchPriority="high" />
       <h1 id="hero-title"><span className="line-mask"><span className="hero-line">让想法发生</span></span><span className="line-mask"><span className="hero-line">让热爱有回响</span></span></h1>
       <p className="hero-meta">心理学 × 人工智能 × 校园创新 · 一支学生团队</p>
       <div className="hero-actions hero-meta"><a className="button button-primary" href="#tracks" data-cursor="OPEN"><span>查看 7 道命题</span></a><a className="button button-ghost" href="#apply" data-cursor="报名">扫码报名</a></div>

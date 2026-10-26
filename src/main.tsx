@@ -4,5 +4,6 @@ import App from './App';
 import './styles/tokens.css';
 import './styles/base.css';
 import './styles/motion.css';
+import './styles/brand.css';
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);
