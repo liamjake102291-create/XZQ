@@ -1,0 +1,9 @@
+import { KeyboardEvent, useState } from 'react';
+import { tracks } from '../content/site';
+import { Qingyu } from './07b-Qingyu';
+
+export function Tracks() {
+  const [tab,setTab]=useState(0); const [open,setOpen]=useState<string|null>(null);
+  const onKey=(e:KeyboardEvent)=>{ if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault(); const next=(tab+(e.key==='ArrowRight'?1:-1)+tracks.length)%tracks.length; setTab(next);setOpen(null); document.getElementById(`tab-${next}`)?.focus();}};
+  return <section id="tracks" className="tracks section" aria-labelledby="tracks-title"><div className="section-head"><span className="eyebrow">05 / OPEN CALL</span><h2 id="tracks-title">三个方向，<br/>七道命题。</h2><p>不找标准答案。我们想看见你如何理解问题、做出判断，并把想法向前推进一步。</p></div><div className="tabs" role="tablist" aria-label="招新命题方向" onKeyDown={onKey}>{tracks.map((t,i)=><button id={`tab-${i}`} role="tab" aria-selected={tab===i} tabIndex={tab===i?0:-1} onClick={()=>{setTab(i);setOpen(null)}} key={t.name}>{t.name}</button>)}</div><div role="tabpanel" aria-labelledby={`tab-${tab}`} className="challenge-list">{tracks[tab].challenges.map(c=>{const isOpen=open===c.id;return <article className={`challenge ${isOpen?'is-open':''}`} key={c.id}><button aria-expanded={isOpen} aria-controls={`challenge-${c.id}`} onClick={()=>setOpen(isOpen?null:c.id)}><span>{c.id}</span><strong>{c.title}</strong><i>→</i></button><div className="challenge-panel" id={`challenge-${c.id}`}><div><div className="challenge-content">{c.background&&<div><span className="eyebrow">挑战背景</span><p>{c.background}</p></div>}<div><span className="eyebrow">你的任务 / 要求</span><p>{c.task}</p></div><div className="challenge-tags"><div><span>提交形式</span><p>{c.submit}</p></div><div><span>考察重点</span><p>{c.focus}</p></div></div>{c.id==='04'&&<Qingyu/>}</div></div></div></article>})}</div></section>;
+}

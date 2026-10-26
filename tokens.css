@@ -1,0 +1,13 @@
+:root{
+  --ink-900:#F7F6F0;--ink-850:#F0F2EB;--ink-800:#E8EEE7;--ink-700:#DFE8E1;
+  --bone:#263B35;--bone-72:rgba(38,59,53,.78);--bone-56:rgba(38,59,53,.64);--bone-34:rgba(38,59,53,.46);--bone-14:rgba(38,59,53,.14);
+  --line:rgba(48,76,65,.12);--line-strong:rgba(48,76,65,.24);
+  --amber:#D7875B;--amber-hot:#BD6845;--ice:#7197A4;
+  --font-display:"Noto Serif SC","Songti SC","STSong","Source Han Serif SC",serif;
+  --font-sans:"Noto Sans SC","PingFang SC","HarmonyOS Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono","JetBrains Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --fs-display:clamp(46px,9vw,144px);--fs-h1:clamp(32px,5vw,72px);--fs-h2:clamp(24px,3.2vw,44px);--fs-h3:clamp(17px,1.5vw,21px);--fs-body:clamp(15px,1.02vw,16.5px);--fs-small:13px;--fs-micro:11px;
+  --lh-display:.96;--lh-title:1.18;--lh-body:1.88;--track-display:0;--track-micro:.22em;
+  --ease-expo:cubic-bezier(.16,1,.3,1);--ease-quint:cubic-bezier(.83,0,.17,1);--dur-1:240ms;--dur-2:520ms;--dur-3:900ms;
+  --gutter:clamp(20px,4vw,72px);--section-y:clamp(88px,13vh,176px);--radius:2px;
+}

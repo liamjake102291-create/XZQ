@@ -1,0 +1,2 @@
+import { aiRules } from '../content/site';
+export function AIRules(){return <section className="ai section" aria-labelledby="ai-title"><div className="section-head"><span className="eyebrow">06 / AI POLICY</span><h2 id="ai-title">可以使用 AI，<br/>但别把判断交出去。</h2></div><div className="ai-grid">{aiRules.map(rule=><article key={rule.title}><h3>{rule.title}</h3><ul>{rule.items.map(item=><li key={item}>{item}</li>)}</ul></article>)}</div></section>}

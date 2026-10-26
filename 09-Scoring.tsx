@@ -1,0 +1,4 @@
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { scoring } from '../content/site';
+export function Scoring(){const ref=useRef<HTMLElement>(null);useEffect(()=>{const root=ref.current;if(!root)return;const ctx=gsap.context(()=>{gsap.fromTo('.score-fill',{scaleX:0},{scaleX:1,duration:1,stagger:.09,ease:'expo.out',scrollTrigger:{trigger:root,start:'top 70%',once:true}})},root);return()=>ctx.revert()},[]);return <section ref={ref} className="scoring section" aria-labelledby="score-title"><div className="section-head"><span className="eyebrow">07 / EVALUATION</span><h2 id="score-title">我们如何看作品</h2></div><div className="score-list">{scoring.map(([name,value])=><div className="score-row" key={name}><span>{name}</span><div><i className="score-fill" style={{width:`${value/25*100}%`}}/></div><strong>{value}%</strong></div>)}</div><p className="footnote">不同方向的命题将结合任务特点进行评分。</p></section>}

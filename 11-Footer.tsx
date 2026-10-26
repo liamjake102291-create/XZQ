@@ -1,0 +1,1 @@
+export function Footer(){return <footer className="footer"><div className="footer-meta"><span>心智桥工作室 / MIND BRIDGE STUDIO</span><span>上川路校区</span><span>2026 秋季招新</span></div><div className="marquee" aria-hidden="true"><span>MIND BRIDGE&nbsp; MIND BRIDGE&nbsp;</span><span>MIND BRIDGE&nbsp; MIND BRIDGE&nbsp;</span></div><div className="copyright">© 2026 心智桥工作室</div></footer>}
