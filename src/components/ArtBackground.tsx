@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 
 const ARTWORKS = [
-  '/art/01-hydrangea-rain.jpg',
-  '/art/02-garden-window.jpg',
-  '/art/03-clover-stone.jpg',
-  '/art/04-blue-wall.jpg',
-  '/art/05-night-bloom.jpg',
-  '/art/06-open-window.jpg',
-  '/art/07-fence-rain.jpg',
-];
+  'art/01-hydrangea-rain.jpg',
+  'art/02-garden-window.jpg',
+  'art/03-clover-stone.jpg',
+  'art/04-blue-wall.jpg',
+  'art/05-night-bloom.jpg',
+  'art/06-open-window.jpg',
+  'art/07-fence-rain.jpg',
+].map((path) => `${import.meta.env.BASE_URL}${path}`);
 
 const vertexShader = `
   varying vec2 vUv;
