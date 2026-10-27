@@ -5,5 +5,6 @@ import './styles/tokens.css';
 import './styles/base.css';
 import './styles/motion.css';
 import './styles/brand.css';
+import './styles/h5-poster.css';
 
 createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>);

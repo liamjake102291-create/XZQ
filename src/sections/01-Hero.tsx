@@ -9,6 +9,7 @@ export function Hero() {
   const bridge = useRef<SVGSVGElement>(null);
   const wordmark = `${import.meta.env.BASE_URL}brand-wordmark.webp`;
   const emblem = `${import.meta.env.BASE_URL}brand-emblem.webp`;
+  const poster = `${import.meta.env.BASE_URL}media/poster.webp`;
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
@@ -29,6 +30,7 @@ export function Hero() {
     return () => { ctx.revert(); removeEventListener('pointermove', move); };
   }, []);
   return <section id="top" ref={ref} className="hero" aria-labelledby="hero-title">
+    <img className="hero-poster" src={poster} alt="" aria-hidden="true" fetchPriority="high" />
     <div className="hero-brand-art" aria-hidden="true"><img src={emblem} alt="" /></div>
     <div className="bridge" aria-hidden="true">
       <svg ref={bridge} viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">

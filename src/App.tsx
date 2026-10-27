@@ -8,6 +8,7 @@ import { Hero } from './sections/01-Hero';
 import { Who } from './sections/02-Who';
 import { Stats } from './sections/03-Stats';
 import { Honors } from './sections/04-Honors';
+import { TeamGallery } from './sections/04b-TeamGallery';
 import { Gains } from './sections/05-Gains';
 import { Process } from './sections/06-Process';
 import { Tracks } from './sections/07-Tracks';
@@ -16,4 +17,4 @@ import { Scoring } from './sections/09-Scoring';
 import { Apply } from './sections/10-Apply';
 import { Footer } from './sections/11-Footer';
 
-export default function App(){useLenis();return <><a className="skip-link" href="#main">跳到主要内容</a><Preloader/><ArtBackground/><Nav/><Grain/><Cursor/><main id="main"><Hero/><Who/><Stats/><Honors/><Gains/><Process/><Tracks/><AIRules/><Scoring/><Apply/></main><Footer/></>}
+export default function App(){useLenis();return <><a className="skip-link" href="#main">跳到主要内容</a><Preloader/><ArtBackground/><Nav/><Grain/><Cursor/><main id="main"><Hero/><Who/><Stats/><Honors/><TeamGallery/><Gains/><Process/><Tracks/><AIRules/><Scoring/><Apply/></main><Footer/></>}
