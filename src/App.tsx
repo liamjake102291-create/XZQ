@@ -1,20 +1,16 @@
+import { useEffect, useState } from 'react';
 import { useLenis } from './lib/useLenis';
 import { Grain } from './components/Grain';
-import { Nav } from './components/Nav';
 import { Cursor } from './components/Cursor';
 import { Preloader } from './components/Preloader';
 import { ArtBackground } from './components/ArtBackground';
-import { Hero } from './sections/01-Hero';
-import { Who } from './sections/02-Who';
-import { Stats } from './sections/03-Stats';
-import { Honors } from './sections/04-Honors';
-import { TeamGallery } from './sections/04b-TeamGallery';
-import { Gains } from './sections/05-Gains';
-import { Process } from './sections/06-Process';
-import { Tracks } from './sections/07-Tracks';
-import { AIRules } from './sections/08-AIRules';
-import { Scoring } from './sections/09-Scoring';
-import { Apply } from './sections/10-Apply';
-import { Footer } from './sections/11-Footer';
+import { ModuleDock, type RouteKey } from './components/ModuleDock';
+import { HomePage } from './pages/HomePage';
+import { AboutPage } from './pages/AboutPage';
+import { ActivitiesPage } from './pages/ActivitiesPage';
+import { HonorsPage } from './pages/HonorsPage';
+import { RecruitPage } from './pages/RecruitPage';
 
-export default function App(){useLenis();return <><a className="skip-link" href="#main">跳到主要内容</a><Preloader/><ArtBackground/><Nav/><Grain/><Cursor/><main id="main"><Hero/><Who/><Stats/><Honors/><TeamGallery/><Gains/><Process/><Tracks/><AIRules/><Scoring/><Apply/></main><Footer/></>}
+const routes: Record<RouteKey, () => React.JSX.Element> = { home:HomePage, about:AboutPage, activities:ActivitiesPage, honors:HonorsPage, recruit:RecruitPage };
+const readRoute=():RouteKey=>{const key=location.hash.replace(/^#\/?/,'') as RouteKey;return key in routes?key:'home'};
+export default function App(){useLenis();const[route,setRoute]=useState<RouteKey>(readRoute);useEffect(()=>{const update=()=>{setRoute(readRoute());scrollTo({top:0,behavior:'instant'})};addEventListener('hashchange',update);if(!location.hash)history.replaceState(null,'','#/home');return()=>removeEventListener('hashchange',update)},[]);const Page=routes[route];return <><a className="skip-link" href="#page-main">跳到主要内容</a><Preloader/><ArtBackground/><Grain/><Cursor/><ModuleDock route={route}/><main id="page-main" className="page-stage" key={route}><Page/></main></>}
